@@ -35,7 +35,7 @@ export default function NotePreview({}: Record<string, never>) {
         </div>
     <p className={css.content}>{note?.content}</p>
     <p className={css.tag}>{ note?.tag}</p>
-    <p className={css.date}>{note?.updatedAt}</p>
+    <p className={css.date}>{note?.createdAt }</p>
         </div>
         </div>
     {isLoading && <p className={style.loadingText}>Loading, please wait...</p> }

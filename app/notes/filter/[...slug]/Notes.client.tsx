@@ -4,14 +4,12 @@ import style from "@//components/loaderErrorCss/loaderErrorCss.module.css"
 import NoteList from "@//components/NoteList/NoteList"
 import { fetchNotes } from "@//lib/api"
 import SearchBox from "@//components/SearchBox/SearchBox";
-import Modal from "@//components/Modal/Modal";
 import Pagination from "@//components/Pagination/Pagination";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import { useQuery, keepPreviousData} from '@tanstack/react-query';
 import { useDebounce } from "use-debounce";
 import { useState } from "react";
 import { Note } from "@/types/note"
-
+import Link from "next/link"
 interface DataProps{
   initialNotes: Note[];
   initialTotalPages: number;
@@ -25,7 +23,6 @@ interface NoteResponse{
 
 export default function NotesClient({initialNotes, initialTotalPages, tag}:DataProps) {
   const [query, setQuery] = useState("")
-  const [isOpenModal, setOpenModal] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
 
   const [debouncedSearchQuery] = useDebounce(query, 300)
@@ -54,17 +51,12 @@ const showNotes =( TagAllOrUndefined || tag !== undefined && !isLoading && data?
   return <div className={css.app}>
 	<header className={css.toolbar}>
       <SearchBox value={query} onSearch = { updateSearchQuery} />
-    {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />}
-		<button className={css.button} onClick={()=> setOpenModal(true)}>Create note + </button>
+      {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={currentPage} onPageChange={setCurrentPage} />}
+      <Link className={css.button} href={"/notes/action/create"}>Create note +</Link>
     </header>
     {showNotes ? <NoteList notes={data?.notes} /> : <p className={style.errorText}>No notes or tags</p>}
     {isLoading && <p className={style.loadingText}>Loading notes, please wait...</p>}
     {isError && <p className={style.errorText}>There was an error, please try again...</p>}
-    {isOpenModal &&
-    <Modal onClose={() => setOpenModal(false)}>
-    <NoteForm onClose={ ()=> setOpenModal(false)} />
-    </Modal>
-    }
   </div>
 
 }
