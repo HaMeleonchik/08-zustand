@@ -10,13 +10,14 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   const { id } = await params
-
+  const note = await fetchNoteById(id)
+  
   return {
-    title: `NoteDetails`,
-    description: `Notes by Id: ${id}`,
+    title: `Note: ${note.title}`,
+    description: note.content.slice(0, 30),
       openGraph: {
-    title: `NoteDetails`,
-    description: `Notes by Id: ${id}`,
+    title: `Note: ${note.title}`,
+    description: note.content.slice(0, 30),
     url: `/notes/${id}`,
     images: [{
       url:"https://ac.goit.global/fullstack/react/notehub-og-meta.jpg",
